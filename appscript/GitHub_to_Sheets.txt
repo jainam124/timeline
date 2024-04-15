@@ -1,7 +1,16 @@
+//Link expiration
+//archive today web page
+
+//Create an Image iso file in docker that can have only the required softwares
+//Linux(u need to have bash), MEGA, PyMOL, BLAST, dotter
+
+//Sheets API to deploy code from github to sheets
+//Appscript code deployment - dev.to
+
 // Function to fetch data from GitHub and update the timeline
 function syncWithGitHub() {
-  var githubRepoUrl = 'https://api.github.com/repos/jainam124/Test_Sheets1/contents/data3'; // Update folder to data2
-  var githubToken = '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';
+  var githubRepoUrl = 'https://api.github.com/repos/jainam124/Test_Sheets1/contents/data3'; Update with your repository details
+  var githubToken = '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';
 
   try {
     // Fetch the list of files in the data2 folder from GitHub
@@ -47,8 +56,8 @@ function parseFasta(fileContent) {
     if (line.startsWith('>')) {
       // New field
       currentField = line.substring(1).trim();
-    } else {
-      // Append to current field's value if not '-'
+    } else if (line.trim() !== '') {
+      // Append to current field's value if not an empty line
       var value = line.trim();
       if (currentField) {
         rowData.push(value === '-' ? '' : value);
@@ -58,6 +67,7 @@ function parseFasta(fileContent) {
 
   return rowData;
 }
+
 
 
 // Helper function to fetch content of a text file
@@ -73,7 +83,7 @@ function fetchFileContent(fileUrl, token) {
 // Function to sync data from Google Sheets to GitHub
 function syncToGitHub() {
   var githubRepoUrl = 'https://api.github.com/repos/jainam124/Test_Sheets1/contents/data4'; // Update with your repository details
-  var githubToken = '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';
+  var githubToken = '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';
 
   try {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
@@ -122,4 +132,3 @@ function onOpen() {
     .addItem('Sync to GitHub', 'syncToGitHub')
     .addToUi();
 }
-
