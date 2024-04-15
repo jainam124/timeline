@@ -10,7 +10,7 @@
 // Function to fetch data from GitHub and update the timeline
 function syncWithGitHub() {
   var githubRepoUrl = 'https://api.github.com/repos/jainam124/Test_Sheets1/contents/data3'; Update with your repository details
-  var githubToken = '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';
+  var githubToken = 'GITHUB_TOKEN';
 
   try {
     // Fetch the list of files in the data2 folder from GitHub
@@ -82,8 +82,8 @@ function fetchFileContent(fileUrl, token) {
 
 // Function to sync data from Google Sheets to GitHub
 function syncToGitHub() {
-  var githubRepoUrl = 'https://api.github.com/repos/jainam124/Test_Sheets1/contents/data4'; // Update with your repository details
-  var githubToken = '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';
+  var githubRepoUrl = 'PATH'; // Update with your repository details
+  var githubToken = 'GITHUB_TOKEN';
 
   try {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
