@@ -9,8 +9,8 @@
 
 // Function to fetch data from GitHub and update the timeline
 function syncWithGitHub() {
-  var githubRepoUrl = 'https://api.github.com/repos/jainam124/Test_Sheets1/contents/data3'; Update with your repository details
-  var githubToken = 'GITHUB_TOKEN';
+  var githubRepoUrl = 'https://api.github.com/repos/jainam124/Test_Sheets1/contents/data3'; // Update folder to data2
+  var githubToken = 'Github_Token';
 
   try {
     // Fetch the list of files in the data2 folder from GitHub
@@ -82,28 +82,40 @@ function fetchFileContent(fileUrl, token) {
 
 // Function to sync data from Google Sheets to GitHub
 function syncToGitHub() {
-  var githubRepoUrl = 'PATH'; // Update with your repository details
-  var githubToken = 'GITHUB_TOKEN';
+  var githubRepoUrl = 'https://api.github.com/repos/jainam124/Test_Sheets1/contents/data4'; // Update with your repository details
+  var githubToken = 'Github_Token';
 
   try {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     var data = sheet.getDataRange().getValues();
+
+    // Object to store counts of years
+    var yearCounts = {};
 
     // Iterate through each row in the sheet
     data.forEach(function(row, index) {
       // Skip header row
       if (index === 0) return;
 
-      // Convert row data to FASTA format
-      var fastaContent = '>' + row[0] + '\n' + row[1] + '\n';
+      // Generate file content in FASTA format
+      var fileContent = generateFastaContent(row);
 
-      // Define file name
-      var fileName = row[0] + '.txt';
+      // Get year from the row
+      var year = row[0] !== '' ? row[0] : '0000';
+
+      // Get count for the year
+      var count = (yearCounts[year] || 0) + 1;
+
+      // Increment count for the year
+      yearCounts[year] = count;
+
+      // Define file name based on the year and count
+      var fileName = year + '_' + count + '.txt';
 
       // Create payload for GitHub API
       var payload = {
         message: 'Adding file ' + fileName,
-        content: Utilities.base64Encode(fastaContent),
+        content: Utilities.base64Encode(fileContent),
       };
 
       // Create the file in GitHub
@@ -119,6 +131,63 @@ function syncToGitHub() {
     });
   } catch (error) {
     Logger.log("Error syncing data to GitHub: " + error.toString());
+  }
+}
+
+// Function to generate file content in FASTA format
+function generateFastaContent(rowData) {
+  var fileContent = '';
+
+  // Iterate through each field in the row
+  for (var i = 0; i < rowData.length; i++) {
+    // Add field name and value to the file content
+    fileContent += '>' + getFieldName(i) + ':\n' + (rowData[i] !== '' ? rowData[i] : '-') + '\n';
+  }
+
+  return fileContent;
+}
+
+// Function to get the field name based on index
+function getFieldName(index) {
+  switch (index) {
+    case 0:
+      return 'Year';
+    case 1:
+      return 'Month';
+    case 2:
+      return 'Day';
+    case 3:
+      return 'Time';
+    case 4:
+      return 'End Year';
+    case 5:
+      return 'End Month';
+    case 6:
+      return 'End Day';
+    case 7:
+      return 'End Time';
+    case 8:
+      return 'Display Date';
+    case 9:
+      return 'Headline';
+    case 10:
+      return 'Text';
+    case 11:
+      return 'Media';
+    case 12:
+      return 'Media Credit';
+    case 13:
+      return 'Media Caption';
+    case 14:
+      return 'Media Thumbnail';
+    case 15:
+      return 'Type';
+    case 16:
+      return 'Group';
+    case 17:
+      return 'Background';
+    default:
+      return '';
   }
 }
 
